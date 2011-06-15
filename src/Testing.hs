@@ -3,7 +3,7 @@ import Graphing
 import Windowing
 
 main = do
-    newWindow "DavePlot" (subPlot [[[], replicate 5 plf2],[replicate 10 plf3, replicate 20 plf4]])
+    newWindow "DavePlot" (plotGraphs [[[], replicate 5 plf2],[replicate 10 plf3, replicate 20 plf4]])
 
     
 plf1 :: Graphing.PLF

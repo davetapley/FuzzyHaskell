@@ -1,4 +1,4 @@
-    module Graphing (subPlot, plotString, Point, PLF) where
+    module Graphing (plotGraphs, Point, PLF) where
     import Graphics.UI.GLUT hiding (minmax)
     import Graphics.UI.GLUT.Fonts
     import Graphics.Rendering.OpenGL.GL.RasterPos
@@ -8,17 +8,17 @@
     type Point = (GLfloat, GLfloat)
     type PLF = [Point]
 
-    subPlot :: [[[PLF]]] -> IO ()
-    subPlot plfs' = 
+    plotGraphs :: [[[PLF]]] -> IO ()
+    plotGraphs plfs' = 
         let plfs = (map . map . map . map) (\(x,y)->(realToFrac x, realToFrac y)) plfs' in do
         clear [ColorBuffer]
-        mapM_ plot (section (-0.9, 0.9) (-0.9, 0.9) plfs)
+        mapM_ plot (positionSubgraphs (-0.9, 0.9) (-0.9, 0.9) plfs)
         flush
 
-    section :: Point -> Point -> [[[PLF]]] -> [(Point, Point, GLfloat, PLF)]
-    section lr tb plfs = [(x,y,z,plf) | (x,rs ) <- zip (sections lr plfs) plfs,
-                                        (y,ls ) <- zip (sections tb rs) rs,
-                                        (z,plf) <- zip [0, 0.1..] ls]
+    positionSubgraphs :: Point -> Point -> [[[PLF]]] -> [(Point, Point, GLfloat, PLF)]
+    positionSubgraphs lr tb plfs = [(x,y,z,plf) | (x,rs ) <- zip (sections lr plfs) plfs,
+                                                  (y,ls ) <- zip (sections tb rs) rs,
+                                                  (z,plf) <- zip [0, 0.1..] ls]
     
     sections :: (GLfloat, GLfloat) -> [a] -> [(GLfloat, GLfloat)]
     sections (min, max) xs = 

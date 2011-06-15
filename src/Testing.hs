@@ -3,7 +3,7 @@ import Graphing
 import Windowing
 
 --import qualified Fuzzy
-import qualified FuzzyPLF
+--import qualified FuzzyPLF
 --import qualified Shoe
 --import qualified ShoePLF
 
@@ -26,16 +26,16 @@ h100 = [1.5, 1.51.. 1.95]
 -- 
 -- pad n xs = xs ++ replicate (n - length xs) []
 -- 
-plf1 :: FuzzyPLF.PLF
+plf1 :: Graphing.PLF
 plf1 = [(0,0), (2,1), (4,0.5), (6,1), (8,1)]
 -- 
-plf2 :: FuzzyPLF.PLF
+plf2 :: Graphing.PLF
 plf2 = [(0,1), (1,1), (2,0), (3,0)]
 
-plf3 :: FuzzyPLF.PLF
+plf3 :: Graphing.PLF
 plf3 = [(0,0), (2,1), (3,0)]
 
-plf4 :: FuzzyPLF.PLF
+plf4 :: Graphing.PLF
 plf4 = [(0,0), (1,1), (3,0)]
 -- 
 -- limiter :: Float -> PLF

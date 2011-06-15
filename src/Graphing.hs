@@ -1,17 +1,14 @@
-    module Graphing (subPlot, plotString) where
+    module Graphing (subPlot, plotString, Point, PLF) where
     import Graphics.UI.GLUT hiding (minmax)
     import Graphics.UI.GLUT.Fonts
     import Graphics.Rendering.OpenGL.GL.RasterPos
     
-    import FuzzyPLF hiding (Point, PLF, minmax, not)
-    import qualified FuzzyPLF (PLF)
-
     import Control.Monad
 
     type Point = (GLfloat, GLfloat)
     type PLF = [Point]
 
-    subPlot :: [[[FuzzyPLF.PLF]]] -> IO ()
+    subPlot :: [[[PLF]]] -> IO ()
     subPlot plfs' = 
         let plfs = (map . map . map . map) (\(x,y)->(realToFrac x, realToFrac y)) plfs' in do
         clear [ColorBuffer]
@@ -36,6 +33,8 @@
 
     plotLines :: [(GLfloat, GLfloat, GLfloat)] -> IO ()
     plotLines cs = mapM_ (uncurry plotLine) (pairs cs)
+        where pairs xs = zip xs (tail xs)
+
 
     plotLine :: (GLfloat, GLfloat, GLfloat) -> (GLfloat, GLfloat, GLfloat) -> IO () 
     plotLine (x1,y1,z1) (x2,y2,z2) = 

@@ -4,10 +4,10 @@
     import Control.Exception
     import Graphics.UI.GLUT
 
-    newWindow name cont = do
+    newWindow renderWorldContent = do
         (progName, args) <- getArgsAndInitialize
-        env <- newIORef (cont, Vertex3 0 0 (-100))
-        createWindow name
+        env <- newIORef (renderWorldContent, Vertex3 0 0 (-100))
+        createWindow progName
         displayCallback $= display env
         keyboardMouseCallback $= Just (kbm env)
         actionOnWindowClose $= MainLoopReturns
@@ -15,10 +15,10 @@
 
     display env = do
         clear [ColorBuffer]
-        (cont,pov) <- readIORef env
+        (renderWorldContent,pov) <- readIORef env
         loadIdentity
         lookAt (Vertex3 0 0 0) pov (Vector3 0 1 0)
-        cont
+        renderWorldContent
         flush
 
     kbm env key keystate modifiers position = do

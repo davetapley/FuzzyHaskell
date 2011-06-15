@@ -1,10 +1,10 @@
 import Graphing
 import Windowing
 
-main = do
-    newWindow "DavePlot" (plotGraphs [[[], replicate 5 plf2],[replicate 10 plf3, replicate 20 plf4]])
+main :: IO ()
+main = newWindow renderWorldContent
+    where renderWorldContent = plotGraphs [[[], replicate 5 plf2],[replicate 10 plf3, replicate 20 plf4]]
 
-    
 plf1 :: Graphing.PLF
 plf1 = [(0,0), (2,1), (4,0.5), (6,1), (8,1)]
 -- 

@@ -24,10 +24,18 @@
         flush
 
     kbm :: IO () -> IORef (Vertex3 GLdouble) -> KeyboardMouseCallback
-    kbm renderWorldContent lookAtRef key keystate modifiers position = do
-         case key of
-             SpecialKey KeyLeft      -> do {modifyIORef lookAtRef (\(Vertex3 x y z) -> (Vertex3 (x-1) y  z)); display renderWorldContent lookAtRef }
-             SpecialKey KeyRight     -> do {modifyIORef lookAtRef (\(Vertex3 x y z) -> (Vertex3 (x+1) y  z)); display renderWorldContent lookAtRef }
-             SpecialKey KeyUp        -> do {modifyIORef lookAtRef (\(Vertex3 x y z) -> (Vertex3 x (y-1)  z)); display renderWorldContent lookAtRef }
-             SpecialKey KeyDown      -> do {modifyIORef lookAtRef (\(Vertex3 x y z) -> (Vertex3 x (y+1)  z)); display renderWorldContent lookAtRef }
-             _                       -> return ()
+    kbm renderWorldContent lookAtRef key keystate modifiers position = 
+         let update dx dy dz = updateLookAtRef lookAtRef (Vertex3 dx dy dz) >> display renderWorldContent lookAtRef in do
+
+             case key of
+                 SpecialKey KeyLeft      -> update (-1) 0 0
+                 SpecialKey KeyRight     -> update 1 0 0
+                 SpecialKey KeyUp        -> update 0 (-1) 0
+                 SpecialKey KeyDown      -> update 0 1 0
+                 _                       -> return ()
+
+    updateLookAtRef :: IORef (Vertex3 GLdouble) -> Vertex3 GLdouble -> IO ()
+    updateLookAtRef ref delta = modifyIORef ref $ add delta
+
+    add :: Num a => Vertex3 a -> Vertex3 a -> Vertex3 a
+    add (Vertex3 v1x v1y v1z) (Vertex3 v2x v2y v2z) = Vertex3 (v1x + v2x) (v1y + v2y) (v1z + v2z)

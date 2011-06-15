@@ -6,25 +6,25 @@
 
     newWindow renderWorldContent = do
         (progName, args) <- getArgsAndInitialize
-        env <- newIORef (renderWorldContent, Vertex3 0 0 (-100))
+        env <- newIORef (Vertex3 0 0 (-100))
         createWindow progName
-        displayCallback $= display env
-        keyboardMouseCallback $= Just (kbm env)
+        displayCallback $= display renderWorldContent env
+        keyboardMouseCallback $= Just (kbm renderWorldContent env)
         actionOnWindowClose $= MainLoopReturns
         mainLoop
 
-    display env = do
+    display renderWorldContent env = do
         clear [ColorBuffer]
-        (renderWorldContent,pov) <- readIORef env
+        pov <- readIORef env
         loadIdentity
         lookAt (Vertex3 0 0 0) pov (Vector3 0 1 0)
         renderWorldContent
         flush
 
-    kbm env key keystate modifiers position = do
+    kbm renderWorldContent env key keystate modifiers position = do
          case key of
-             SpecialKey KeyLeft      -> do {modifyIORef env (\(cont, Vertex3 x y z) -> (cont, Vertex3 (x-1) y  z)); display env }
-             SpecialKey KeyRight     -> do {modifyIORef env (\(cont, Vertex3 x y z) -> (cont, Vertex3 (x+1) y  z)); display env }
-             SpecialKey KeyUp        -> do {modifyIORef env (\(cont, Vertex3 x y z) -> (cont, Vertex3 x (y-1)  z)); display env }
-             SpecialKey KeyDown      -> do {modifyIORef env (\(cont, Vertex3 x y z) -> (cont, Vertex3 x (y+1)  z)); display env }
+             SpecialKey KeyLeft      -> do {modifyIORef env (\(Vertex3 x y z) -> (Vertex3 (x-1) y  z)); display renderWorldContent env }
+             SpecialKey KeyRight     -> do {modifyIORef env (\(Vertex3 x y z) -> (Vertex3 (x+1) y  z)); display renderWorldContent env }
+             SpecialKey KeyUp        -> do {modifyIORef env (\(Vertex3 x y z) -> (Vertex3 x (y-1)  z)); display renderWorldContent env }
+             SpecialKey KeyDown      -> do {modifyIORef env (\(Vertex3 x y z) -> (Vertex3 x (y+1)  z)); display renderWorldContent env }
              _                       -> return ()

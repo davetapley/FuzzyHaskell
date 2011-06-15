@@ -1,5 +1,5 @@
 main: 
-	ghc -XTypeSynonymInstances --make Testing.hs -o Test
+	ghc --make Testing.hs -o Test
 
 clean:
 	rm -fv *.o
